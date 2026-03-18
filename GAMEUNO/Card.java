@@ -1,33 +1,57 @@
 package GAMEUNO;
 
 public class Card {
-    // Atributos privados
-    private String color; // Color de la carta
-    private int numero; // Numero de la carta
 
-    // Constructor de la clase Card
-    public Card(String color, int numero) { // Parametros
+    private String color;
+    private int numero;
+    private TipoCarta tipo;
+
+    // Constructor para cartas NUMÉRICAS
+    public Card(String color, int numero) {
         this.color = color;
         this.numero = numero;
+        this.tipo = TipoCarta.NUMERO;
     }
-    // Metodo getter para obtener el color
+
+    // Constructor para cartas ESPECIALES
+    public Card(String color, TipoCarta tipo) {
+        this.color = color;
+        this.tipo = tipo;
+        this.numero = -1;
+    }
+
     public String getColor() {
         return color;
     }
-    // Metodo getter para obtener el numero
+
     public int getNumero() {
         return numero;
     }
-    // Metodo para verificar si esta carta ouede jugarse sobre otra carta
-    public boolean esJugableSobre(Card otra) {
-    // Si no hay carta en mesa, cualquier carta es válida
-        if (otra == null) return true;
-    // Se puede jugar si el color es igual o el número es igual
-        return this.color.equals(otra.color) || this.numero == otra.numero;
+
+    public TipoCarta getTipo() {
+        return tipo;
     }
-    // Metodo que define como se imprime la carta en consola
+
+    // Verifica si la carta puede jugarse
+    public boolean esJugableSobre(Card otra) {
+
+        if (otra == null) return true;
+
+        // comodines siempre se pueden jugar
+        if (tipo == TipoCarta.WILD || tipo == TipoCarta.DRAW4)
+            return true;
+
+        return this.color.equals(otra.color) ||
+               this.numero == otra.numero ||
+               this.tipo == otra.tipo;
+    }
+
     @Override
     public String toString() {
-        return color + " " + numero;
+
+        if(tipo == TipoCarta.NUMERO)
+            return color + " " + numero;
+
+        return color + " " + tipo;
     }
 }
